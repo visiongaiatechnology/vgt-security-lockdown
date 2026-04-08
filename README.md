@@ -317,7 +317,7 @@ On first activation:
 | Tool | Type | Purpose |
 |---|---|---|
 | 🔒 **VGT Security Lockdown** | **Absolute Lockdown** | MU-Interceptor, Zero-Knowledge Auth, Panic Trigger — you are here |
-| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/vgt-sentinel)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
+| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/sentinelcom)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
 | 🛡️ **[VGT Myrmidon](https://github.com/visiongaiatechnology/vgtmyrmidon)** | **ZTNA** | Zero Trust Device Registry & Cryptographic Integrity Verification |
 | ☠️ **[VGT KillerDom](https://github.com/visiongaiatechnology/killerdom)** | **WAF Research Engine** | Polyglot Regex Annihilation Core — PHP, Python, Go, Rust |
 | ⚡ **[VGT Auto-Punisher](https://github.com/visiongaiatechnology/vgt-auto-punisher)** | **IDS** | L4+L7 Hybrid IDS — attackers terminated before they even knock |
