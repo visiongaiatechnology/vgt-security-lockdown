@@ -72,7 +72,7 @@ final class ConfigManager {
         // L3: Database Fallback (I/O Blocked/Read-Only Container Truth)
         $db_state = get_option('vgt_omega_fallback_state');
         if ($db_state) {
-            $decoded_state = @unserialize(base64_decode($db_state));
+            $decoded_state = json_decode(base64_decode($db_state), true);
             if (is_array($decoded_state)) {
                 $this->state = wp_parse_args($decoded_state, $default);
                 return;
@@ -111,7 +111,8 @@ final class ConfigManager {
         } else {
             // Letzter Fallback auf DB, isoliert durch base64/serialize Obfuscation
             // um einfache SQLi-Scanner abzuwehren, falls File-System Read-Only ist.
-            update_option('vgt_omega_fallback_state', base64_encode(serialize($this->state)), false);
+            update_option('vgt_omega_fallback_state', base64_encode(json_encode($this->state)), false);
+
         }
     }
 
