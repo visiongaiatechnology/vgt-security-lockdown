@@ -32,6 +32,9 @@
 
 VGT Security Lockdown is not a conventional security plugin. It is a **Modular Interceptor** — an autonomous security core that embeds itself deep into the WordPress runtime on first activation and enforces absolute lockdown from there.
 
+<img width="1158" height="509" alt="{AACA48C8-4EC4-4FDD-9647-0458C2FC4B93}" src="https://github.com/user-attachments/assets/39803071-be0e-4c31-adf8-93aa0b80f7ab" />
+
+
 ```
 Standard WordPress Security:
 → Plugin can be deactivated via dashboard
@@ -260,7 +263,7 @@ On first activation:
 | Tool | Type | Purpose |
 |---|---|---|
 | 🔒 **VGT Security Lockdown** | **Absolute Lockdown** | MU-Interceptor, Zero-Knowledge Auth, Panic Trigger — you are here |
-| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/vgt-sentinel)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
+| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/sentinelcom)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
 | 🛡️ **[VGT Myrmidon](https://github.com/visiongaiatechnology/vgtmyrmidon)** | **ZTNA** | Zero Trust Device Registry & Cryptographic Integrity Verification |
 | ☠️ **[VGT KillerDom](https://github.com/visiongaiatechnology/killerdom)** | **WAF Research Engine** | Polyglot Regex Annihilation Core — PHP, Python, Go, Rust |
 | ⚡ **[VGT Auto-Punisher](https://github.com/visiongaiatechnology/vgt-auto-punisher)** | **IDS** | L4+L7 Hybrid IDS — attackers terminated before they even knock |
