@@ -34,7 +34,6 @@ VGT Security Lockdown is not a conventional security plugin. It is a **Modular I
 
 <img width="1158" height="509" alt="{AACA48C8-4EC4-4FDD-9647-0458C2FC4B93}" src="https://github.com/user-attachments/assets/39803071-be0e-4c31-adf8-93aa0b80f7ab" />
 
-
 ```
 Standard WordPress Security:
 → Plugin can be deactivated via dashboard
@@ -144,46 +143,101 @@ The WordPress control panel is fully removed from the DOM. Standard paths (`/wp-
 
 > **Before activating:** Ensure WP-CLI access is available. In the event of misconfiguration, the dashboard cannot be recovered without CLI access.
 
-### WP-CLI Commands
+### WP-CLI Command Reference
+
+All commands operate on the namespace `wp vgt` and work directly on the isolated configuration matrix (`vgt-matrix.php`) — no database query required.
+
+---
+
+#### `wp vgt status`
+Returns the current integrity status of the kernel.
 
 ```bash
-# Disable lockdown
-wp vgt-lockdown disable
-
-# Reset master password
-wp vgt-lockdown reset-auth
-
-# Query system status
-wp vgt-lockdown status
-
-# Add IP to whitelist
-wp vgt-lockdown whitelist add YOUR.IP.HERE
-
-# Manually remove MU-Plugin (emergency)
-rm /wp-content/mu-plugins/vgt-lockdown-core.php
+wp vgt status
+# → LOCKED   (Omega Protocol active)
+# → OPEN     (System normalized)
 ```
 
-### Panic Trigger
+> Fast diagnosis of system state without any database query.
+
+---
+
+#### `wp vgt lock`
+Forces immediate activation of the OMEGA PROTOCOL.
 
 ```bash
-# Immediate global lockdown via POST trigger
-curl -X POST https://yourdomain.com/vgt-panic \
-     --data "token=YOUR_PANIC_TOKEN"
+wp vgt lock
+# → OMEGA PROTOCOL ENGAGED. System is locked.
 ```
 
-> The Panic Trigger is physically isolated from WordPress core and can be activated even during an active dashboard compromise.
+> Sets `is_locked` to `true`. All unauthorized mutations (AJAX/REST/POST) are immediately terminated. The dashboard is sealed.
+
+---
+
+#### `wp vgt unlock`
+Deactivates lockdown mode and normalizes the system.
+
+```bash
+wp vgt unlock
+# → Lockdown lifted. System normalized.
+```
+
+> Use after a threat has been resolved to restore standard operation.
+
+---
+
+#### `wp vgt set-master`
+Updates the cryptographic master sequence (Argon2id). **Interactive mode only.**
+
+```bash
+wp vgt set-master
+# → VGT KERNEL: Enter the new cryptographic sequence:
+# → [terminal echo disabled — input not visible]
+# → Master password updated (Argon2id hash stored in isolated matrix).
+```
+
+> **OPSEC:** Passing the password as an argument (`wp vgt set-master mypassword`) is **blocked** — this would expose it in `.bash_history`. The system disables terminal echo via `stty -echo` during input to prevent visual exposure.
+>
+> **Hashing:** Argon2id with high memory-cost factor. The hash never leaves the isolated `vgt-matrix.php`.
+
+---
+
+### Error Codes & Diagnostics
+
+| Command | Error | Cause |
+|---|---|---|
+| `set-master` | `Terminal masking not available` | PHP environment has no rights for `system()` calls — input will be visible |
+| All | `Unknown command` | VGT Kernel not correctly loaded or autoloader error |
+| `lock` / `unlock` | `Permission Denied` | Filesystem of `vgt-matrix.php` is set to read-only |
+
+---
+
+### Emergency Recovery Recipe
+
+Locked out of the dashboard? Connect via SSH:
+
+```bash
+# 1. Navigate to WordPress root
+cd /var/www/html
+
+# 2. Check system status
+wp vgt status
+
+# 3. Set a new master password (interactive)
+wp vgt set-master
+
+# 4. Unlock the system
+wp vgt unlock
+```
 
 ### Manual Removal (no WP-CLI available)
 
 ```bash
-# 1. Remove MU-Plugin
-rm /wp-content/mu-plugins/vgt-lockdown-core.php
+# 1. Remove MU-Plugin loader
+rm /wp-content/mu-plugins/vgt-loader.php
 
 # 2. Remove plugin directory
 rm -rf /wp-content/plugins/vgt-security-lockdown/
-
-# 3. Clear WordPress cache
-wp cache flush
 ```
 
 ---
@@ -263,7 +317,7 @@ On first activation:
 | Tool | Type | Purpose |
 |---|---|---|
 | 🔒 **VGT Security Lockdown** | **Absolute Lockdown** | MU-Interceptor, Zero-Knowledge Auth, Panic Trigger — you are here |
-| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/sentinelcom)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
+| ⚔️ **[VGT Sentinel](https://github.com/visiongaiatechnology/vgt-sentinel)** | **WAF / IDS Framework** | Zero-Trust WordPress Security Suite |
 | 🛡️ **[VGT Myrmidon](https://github.com/visiongaiatechnology/vgtmyrmidon)** | **ZTNA** | Zero Trust Device Registry & Cryptographic Integrity Verification |
 | ☠️ **[VGT KillerDom](https://github.com/visiongaiatechnology/killerdom)** | **WAF Research Engine** | Polyglot Regex Annihilation Core — PHP, Python, Go, Rust |
 | ⚡ **[VGT Auto-Punisher](https://github.com/visiongaiatechnology/vgt-auto-punisher)** | **IDS** | L4+L7 Hybrid IDS — attackers terminated before they even knock |
