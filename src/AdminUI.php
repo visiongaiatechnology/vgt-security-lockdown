@@ -16,8 +16,27 @@ final class AdminUI implements ModuleInterface {
 
     public function register(): void {
         if (!is_admin()) return;
+        
         add_action('admin_menu', [$this, 'register_menu']);
         add_action('admin_post_vgt_save_settings', [$this, 'save_settings']);
+        
+        // FIX: add_action gehört HIER in die register() Methode!
+        add_action('admin_head', [$this, 'hide_delete_button']);
+    }
+    
+    // FIX: Ausgelagerte Methode für den Löschen-Button
+    public function hide_delete_button(): void {
+        $plugin_slug = 'vgt-security-lockdown/vgt-security-lockdown.php';
+        ?>
+        <style>
+            tr[data-slug="<?php echo esc_attr($plugin_slug); ?>"] .delete a {
+                display: none !important;
+            }
+            tr[data-slug="<?php echo esc_attr($plugin_slug); ?>"] .check-column input {
+                display: none !important;
+            }
+        </style>
+        <?php
     }
 
     public function register_menu(): void {
